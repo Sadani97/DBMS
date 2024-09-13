@@ -1,0 +1,195 @@
+JOIN  
+
+
+
+
+
+DROP DATABASE Institute;
+
+
+CREATE DATABASE Institute;
+
+
+USE Institute;
+
+CREATE TABLE Course(
+	CourseID VARCHAR(10),
+	CName VARCHAR(20) NOT NULL,
+	Fee INT(10),
+	CONSTRAINT PRIMARY KEY(CourseID)
+);
+
+
+DESC Course;
+
+INSERT INTO Course VALUES('C001','IT',50000),('C002','HR',60000),('C003','ACC',40000);
+
+SELECT * FROM Course;
+
+
+CREATE TABLE Student(
+	StuID VARCHAR(10),
+	Name VARCHAR(20),
+	Gender VARCHAR(10),
+	DOB DATE,
+	Contact INT(15) UNIQUE NOT NULL,
+	CourseID VARCHAR(10),
+	CONSTRAINT PRIMARY KEY(StuID),  // --> metanata CourseID demmoth NULL value ekk danna beri wenawa S002 walata
+	CONSTRAINT FOREIGN KEY(CourseID) REFERENCES Course(CourseID)
+);
+
+DESC Student;
+
+
+INSERT INTO Student VALUES('S001','Kamal','M','2000-01-01',0771111111,'C001');
+
+INSERT INTO Student(StuID,Name,Gender,DOB,Contact )VALUES('S002','Kasun','M','2000-01-01',0771111112);
+
+
+INSERT INTO Student VALUES('S003','Nimal','M','2000-01-01',0771111113,'C002');
+INSERT INTO Student VALUES('S004','Amali','F','2000-01-01',0771111114,'C001');
+
+INSERT INTO Student VALUES('S005','Ann','F','2000-01-01',0771111512,'C002');
+
+
+SELECT Name,CourseID FROM Student;
+
+SELECT Student.Name,Student.CourseID,Course.CName
+FROM Student
+INNER JOIN Course
+ON Student.CourseID=Course.CourseID;
+
+
+
+
+
+SELECT Student.Name,Student.DOB,Student.Contact,Course.CName,Course.Fee
+FROM Student
+INNER JOIN Course
+ON Student.CourseID=Course.CourseID;
+
+
+
+
+
+SELECT Name,DOB,Contact,CName,Fee
+FROM Student
+INNER JOIN Course
+ON Student.CourseID=Course.CourseID;
+
+
+
+SELECT Student.Name,Student.DOB,Student.Contact,Course.CName,Course.Fee
+FROM Student
+LEFT JOIN Course
+ON Student.CourseID=Course.CourseID;
+
+
+
+
+SELECT Student.Name,Student.DOB,Student.Contact,Course.CName,Course.Fee
+FROM Student
+RIGHT JOIN Course
+ON Student.CourseID=Course.CourseID;
+
+
+
+
+
+
+
+SELECT Student.Name,Student.DOB,Student.Contact,Course.CName,Course.Fee
+FROM Course
+RIGHT JOIN Student
+ON Student.CourseID=Course.CourseID;
+
+
+
+
+SELECT Student.Name,Student.DOB,Student.Contact,Course.CName,Course.Fee
+FROM Student
+LEFT JOIN Course
+ON Student.CourseID=Course.CourseID
+UNION
+SELECT Student.Name,Student.DOB,Student.Contact,Course.CName,Course.Fee
+FROM Student
+RIGHT JOIN Course
+ON Student.CourseID=Course.CourseID;
+
+
+
+CREATE TABLE Module(
+	MCode VARCHAR(10),
+	MName VARCHAR(20),
+	Time INT(10),
+	CourseID VARCHAR(10),
+	CONSTRAINT PRIMARY KEY(MCode),  
+	CONSTRAINT FOREIGN KEY(CourseID) REFERENCES Course(CourseID)
+);
+
+INSERT INTO Module VALUES ('M001','Programming',120,'C001'),('M002','HR',100,'C002');
+
+
+INSERT INTO Module(MCode,MName,Time) VALUES ('M003','Language Skill',80);
+
+
+
+
+
+
+SELECT Student.Name,Student.DOB,Student.Contact,Course.CName,Course.Fee,Module.MCode,Module.Time
+FROM Student
+INNER JOIN Course
+ON Student.CourseID=Course.CourseID
+INNER JOIN Module
+ON Course.CourseID=Module.CourseID;
+
+
+
+
+
+SELECT Student.Name,Student.DOB,Student.Contact,Course.CName,Course.Fee,Module.MCode,Module.Time
+FROM Student
+INNER JOIN Course
+ON Student.CourseID=Course.CourseID
+INNER JOIN Module
+ON Course.CourseID=Module.CourseID
+WHERE Student.Name='Amal';
+
+
+
+
+
+SELECT Student.Name,Student.DOB,Student.Contact,Course.CName,Course.Fee,Module.MCode,Module.Time
+FROM Student
+INNER JOIN Course
+ON Student.CourseID=Course.CourseID
+INNER JOIN Module
+ON Course.CourseID=Module.CourseID
+WHERE Course.Fee=50000;
+
+
+
+
+
+SELECT T1.Name,T1.DOB,T1.Contact,T2.CName,T2.Fee,T3.MCode,T3.Time
+FROM Student T1
+INNER JOIN Course T2
+ON T1.CourseID=T2.CourseID
+INNER JOIN Module T3
+ON T2.CourseID=T3.CourseID
+WHERE T2.Fee=50000;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
